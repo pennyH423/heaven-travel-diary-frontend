@@ -1,0 +1,134 @@
+{
+  "name": "大熊",
+  "promptVersion": "portrait-v10-two-stage-20260729",
+  "views": [
+    "正面",
+    "侧面",
+    "背面",
+    "仰视",
+    "俯视",
+    "细节"
+  ],
+  "scene": "山间小溪，阳光透过树叶洒落",
+  "copy": "溪水冰凉，爪子踩在光滑的石头上。\n风吹来青草香，比家里的任何味道都新鲜。",
+  "date": "2026.10.13",
+  "validation": {
+    "base": {
+      "passed": true,
+      "checks": {
+        "species": true,
+        "identity": true,
+        "coat": true,
+        "clothing": true,
+        "accessories": true,
+        "singleCharacter": true,
+        "fullBody": true
+      },
+      "issues": [],
+      "attempts": 1,
+      "summary": {
+        "species": "犬",
+        "breedOrType": "泰迪犬/贵宾犬，小型体型",
+        "coat": "浅棕色/杏色卷毛，毛长卷曲",
+        "distinctiveFeatures": "圆形脸型，小黑眼睛，鼻子小而黑，耳朵下垂贴脸，身体呈方形紧凑比例，尾巴向上翘起",
+        "clothingPresent": true,
+        "clothing": "连体服装，主体蓝色，前腿和后腿覆盖白色，前胸和后臀白色，领口、袖口和腿口蓝白条纹设计",
+        "clothingStructure": "连体长袖结构，覆盖前两条腿和后两条腿，领口圆形、袖口和腿口均为蓝白双色条纹设计，衣身贴身连体式",
+        "clothingGraphics": "前胸蓝色区域中央有白色竖椭圆形徽章，徽章内部有黑色数字或符号，具体形状看不清",
+        "accessories": "无"
+      }
+    },
+    "views": {
+      "passed": true,
+      "method": "per-cell-visual-comparison",
+      "checks": {
+        "baseBadgeDescription": "Circular badge with white background and gray/blue star outline, positioned on upper chest",
+        "perView": [
+          {
+            "view": "front",
+            "identityMatch": true,
+            "costumeMatch": true,
+            "cameraCorrect": true,
+            "badgeCount": 1,
+            "badgeMatchesWhenVisible": true
+          },
+          {
+            "view": "side",
+            "identityMatch": true,
+            "costumeMatch": true,
+            "cameraCorrect": true,
+            "badgeCount": 1,
+            "badgeMatchesWhenVisible": true
+          },
+          {
+            "view": "back",
+            "identityMatch": true,
+            "costumeMatch": true,
+            "cameraCorrect": true,
+            "badgeCount": 0,
+            "badgeMatchesWhenVisible": true
+          },
+          {
+            "view": "low-angle",
+            "identityMatch": true,
+            "costumeMatch": true,
+            "cameraCorrect": true,
+            "badgeCount": 1,
+            "badgeMatchesWhenVisible": true
+          },
+          {
+            "view": "high-angle",
+            "identityMatch": true,
+            "costumeMatch": true,
+            "cameraCorrect": true,
+            "badgeCount": 1,
+            "badgeMatchesWhenVisible": true
+          },
+          {
+            "view": "face-detail",
+            "identityMatch": true,
+            "costumeMatch": true,
+            "cameraCorrect": true,
+            "badgeCount": 1,
+            "badgeMatchesWhenVisible": true
+          }
+        ],
+        "passed": true,
+        "issues": []
+      },
+      "earlierSummaryBasedValidation": {
+        "passed": false,
+        "checks": {
+          "species": true,
+          "identity": true,
+          "coat": true,
+          "clothing": true,
+          "clothingStructure": true,
+          "clothingGraphics": false,
+          "accessories": true,
+          "sameCharacterAcrossViews": true,
+          "grid3x2": true,
+          "viewOrder": true,
+          "sixCellsOnly": true
+        },
+        "issues": [
+          "徽章图案与图片B不符：图片B中徽章为竖椭圆形内含数字/符号，图片C中所有视图的徽章均为星形符号，属于凭空改写的logo符号"
+        ]
+      },
+      "needsUserReview": true
+    },
+    "postcard": {
+      "passed": true,
+      "checks": {
+        "species": true,
+        "identity": true,
+        "coat": true,
+        "clothing": true,
+        "accessories": true,
+        "singlePet": true
+      },
+      "issues": [],
+      "attempts": 1
+    }
+  }
+}
