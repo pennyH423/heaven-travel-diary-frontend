@@ -1,4 +1,4 @@
-import { requestDemo, DEMO_VERSION, installDemoLabels } from './demo.js';
+import { requestDemo, DEMO_VERSION, DEMO_ASSETS, installDemoLabels } from './demo.js';
 const PROMPT_VERSION=DEMO_VERSION;
 const pages=document.querySelectorAll('.page'),toast=document.querySelector('#toast'),notes=JSON.parse(localStorage.getItem('frontend-demo-star-notes')||'[]');
 let photo='',photoDetail='',starPhoto='',postcardRead=true,folderSelecting=false,selectedStarColor='yellow',generatedPet=null,portraitDraft=null,petBeforeAvatarChange=null,petConfirmed=false,petReviewFromExisting=false,lifePhotos=[],currentPostcardId='',postcardGenerationInFlight=false,portraitRequestToken=0;const selectedPostcards=new Set();
@@ -13,7 +13,7 @@ const stateDbName='heaven-travel-diary-frontend-demo',stateStoreName='app-state'
 function openStateDb(){if(!('indexedDB'in window))return Promise.reject(new Error('当前浏览器不支持本地资料库'));if(stateDbPromise)return stateDbPromise;stateDbPromise=new Promise((resolve,reject)=>{const request=indexedDB.open(stateDbName,1);request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains(stateStoreName))request.result.createObjectStore(stateStoreName)};request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)});return stateDbPromise}
 async function readAppState(){try{const db=await openStateDb();return await new Promise((resolve,reject)=>{const request=db.transaction(stateStoreName,'readonly').objectStore(stateStoreName).get(stateKey);request.onsuccess=()=>resolve(request.result||null);request.onerror=()=>reject(request.error)})}catch(error){console.warn('[state] 无法读取本地状态',error);return null}}
 function persistAppState(){const snapshot={postcardSeedVersion:2,generatedPet:generatedPet?{...generatedPet}:null,portraitDraft:portraitDraft?{...portraitDraft}:null,petBeforeAvatarChange:petBeforeAvatarChange?{...petBeforeAvatarChange}:null,petConfirmed,postcardRead,postcards:postcards.map(card=>({...card}))};stateSaveQueue=stateSaveQueue.catch(()=>{}).then(async()=>{const db=await openStateDb();await new Promise((resolve,reject)=>{const transaction=db.transaction(stateStoreName,'readwrite');transaction.objectStore(stateStoreName).put(snapshot,stateKey);transaction.oncomplete=resolve;transaction.onerror=()=>reject(transaction.error);transaction.onabort=()=>reject(transaction.error)})}).catch(error=>console.warn('[state] 无法保存本地状态',error));return stateSaveQueue}
-function isImageValue(value){return /^data:image\/(?:png|jpeg|webp);base64,/i.test(String(value||''))||/^https?:\/\//i.test(String(value||''))}
+function isImageValue(value){const source=String(value||'');return /^data:image\/(?:png|jpeg|webp|svg\+xml);base64,/i.test(source)||/^https?:\/\//i.test(source)||/^(?:\.\/|\/)?assets\/[^?#]+\.(?:png|jpe?g|webp|svg)(?:[?#].*)?$/i.test(source)}
 function validateBasePortraitResult(result){if(!isImageValue(result?.image))throw new Error('图片服务返回的基础形象不完整，请重试');return result}
 function validateViewsPortraitResult(result){if(!isImageValue(result?.sheet))throw new Error('图片服务返回的六视图不完整，请重试');return result}
 function validateLetterResult(result){if(!isImageValue(result?.image)||!result?.scene||!result?.copy||!result?.date)throw new Error('图片服务返回的明信片不完整，请重试');return result}
@@ -138,7 +138,15 @@ async function initialize(){
   if(!outdatedUnconfirmedPet&&!petConfirmed&&isCurrentDraft){portraitDraft=draft;photo=draft.sourceImage;photoDetail=draft.sourceDetailImage||draft.sourceImage}
   else if(draft&&!petConfirmed&&!generatedPet)outdatedDraftDiscarded=true;
  }
- midnightDelivery();scheduleMidnight();setStarColor(selectedStarColor);render();setNav('home');renderPetState();
+ midnightDelivery();scheduleMidnight();setStarColor(selectedStarColor);render();setNav('home');
+ if(!generatedPet&&!portraitDraft){
+  photo=DEMO_ASSETS.photo;photoDetail=DEMO_ASSETS.photo;
+  const seededPreview=document.querySelector('#petPreview');
+  if(seededPreview){seededPreview.classList.add('has-image');seededPreview.style.backgroundImage=`url(${DEMO_ASSETS.photo})`}
+  const seededName=document.querySelector('#petName');
+  if(seededName)seededName.value='大熊';
+ }
+ renderPetState();
  if(petBeforeAvatarChange&&!generatedPet&&!portraitDraft){const cancelChange=document.querySelector('#cancelBasePending');cancelChange.textContent='取消更换宠物形象';cancelChange.classList.remove('hidden')}
  const modifyDetails=document.querySelector('#modifyPetDetails');if(modifyDetails){const openExistingReview=modifyDetails.onclick;modifyDetails.onclick=()=>{petBeforeAvatarChange=generatedPet?{...generatedPet}:petBeforeAvatarChange;petReviewFromExisting=true;openExistingReview();persistAppState()}}
  if(outdatedDraftDiscarded){persistAppState();setTimeout(()=>notify('生成流程已升级，请重新上传照片生成新版形象'),350)}
